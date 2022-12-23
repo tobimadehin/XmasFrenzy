@@ -12,14 +12,14 @@ public class Enemy : MonoBehaviour
 
     //Public
     public float speed;
-    [HideInInspector] public float health ;
+    [HideInInspector] public float health;
+    [HideInInspector] public Player player;
 
     //Private
-    [SerializeField] private Player player;
     private Rigidbody rigid;
     private CustomUtilities utilities;
     private bool isProximityClose;
-    private float timer, lastTimeUpdate;
+    private float lastTimeUpdate;
 
     //Protected
     protected EnemyState enemyState = EnemyState.Idle;
@@ -27,13 +27,14 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        player = FindObjectOfType<Player>();
         rigid = GetComponent<Rigidbody>();
         utilities = player.utilities;
     }
 
     void Start()
     {
-        
+        utilities.enemies.Add(this);
     }
 
     void Update()
@@ -69,7 +70,6 @@ public class Enemy : MonoBehaviour
 
             if (Time.time - lastTimeUpdate > 1)
             {
-                timer++;
                 player.health -= damage;
                 print("Damage! " + player.health + " remaining");
                 lastTimeUpdate = Time.time;

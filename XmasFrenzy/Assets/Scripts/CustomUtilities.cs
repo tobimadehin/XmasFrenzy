@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class CustomUtilities : MonoBehaviour
 {
+    //Public
     public Camera mainCamera;
-    Plane plane = new Plane(Vector3.down, 0);
+    public List<Enemy> enemies;
+
+    //Private
+    private Plane plane = new Plane(Vector3.down, 0);
 
     private void Awake()
     {
@@ -30,5 +34,10 @@ public class CustomUtilities : MonoBehaviour
         }
 
         return mouseWorldPosition;
+    }
+
+    public int EnemyCount()
+    {
+        return enemies.Count;
     }
 }
