@@ -10,6 +10,7 @@ TagManager:
   - EnemyProximity
   - Cursor
   - RotationProximity
+  - Bullet
   layers:
   - Default
   - TransparentFX

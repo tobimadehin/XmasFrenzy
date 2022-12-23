@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -8,7 +10,7 @@ public class Player : MonoBehaviour
     public CustomUtilities utilities;
     [HideInInspector] public float health = 100;
     public GameObject bullet;
-    [HideInInspector] public float damage;
+    public float damage = 5;
 
     //Private
     private Rigidbody rigid;
@@ -30,10 +32,12 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        FaceCursor();
         Attack();
+        FaceCursor();
         Speed();
         CursorDistnce();
+        utilities.HealthBarsUpdate(utilities.healthBar, this, 100);
+        utilities.GameOverChecker(health);
     }
 
     private void FixedUpdate()
@@ -43,7 +47,7 @@ public class Player : MonoBehaviour
 
     private void FaceCursor()
     {
-        if (cursor.isRotationProximity)
+        if (cursor.isRotationProximity && !utilities.GameOverChecker(health))
         {
             transform.LookAt(cursor.transform.position);
         }
@@ -88,6 +92,7 @@ public class Player : MonoBehaviour
         if (Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
+
             Instantiate(bullet, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
         }
     }

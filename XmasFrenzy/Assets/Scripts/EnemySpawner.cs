@@ -8,7 +8,6 @@ public class EnemySpawner : MonoBehaviour
     public Enemy ememy;
     public SpawnPoint[] spawnPoints;
 
-
     //Private
     private float lastTimeUpdate;
     [SerializeField] private CustomUtilities utilities;
@@ -19,7 +18,6 @@ public class EnemySpawner : MonoBehaviour
         Spawn();
         TimerState();
         CanSpawn();
-        NextSpawnLocation();
     }
 
     private bool TimerState()
@@ -40,7 +38,8 @@ public class EnemySpawner : MonoBehaviour
     {
         if (TimerState() && CanSpawn())
         {
-            //Instantiate(ememy.gameObject, NextSpawnLocation().position, NextSpawnLocation().rotation);
+            NextSpawnLocation();
+            Instantiate(ememy.gameObject, NextSpawnLocation().position, NextSpawnLocation().rotation);
             print("Spawned Player!");
             TimerState().Equals(false);
         }
@@ -69,15 +68,14 @@ public class EnemySpawner : MonoBehaviour
         int randomInt;
         int numberOfSpawnPoints = spawnPoints.Length;
 
-        if (TimerState())
-        {
-            randomInt = Random.Range(1, numberOfSpawnPoints + 1);
+        randomInt = Random.Range(0, numberOfSpawnPoints);
 
-            for (int i = 0; i < spawnPoints.Length; i++)
-            {
-                nextSpawnLocation = spawnPoints[randomInt].transform;
-            }
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            nextSpawnLocation = spawnPoints[randomInt].transform;
         }
+
+        print("The random number is " + randomInt);
 
         return nextSpawnLocation;
     }

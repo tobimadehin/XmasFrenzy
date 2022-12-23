@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour
 
     private void ForwardMovement()
     {
-        rigid.AddForce(this.transform.forward * 750);
+        rigid.AddForce(this.transform.forward * 50);
     }
 
     private void Destroyer()
@@ -45,13 +45,14 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            enemy.health -= enemy.player.damage;
-            Destroy(this.gameObject);
+            enemy.TakeDamage();
         }
+
+        Destroy(this.gameObject);
     }
 }

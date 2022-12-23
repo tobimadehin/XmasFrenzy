@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -11,9 +9,11 @@ public class Enemy : MonoBehaviour
     };
 
     //Public
-    public float speed;
-    [HideInInspector] public float health;
+    [HideInInspector] public float speed;
+    [HideInInspector] public float health = 25;
     [HideInInspector] public Player player;
+    public Canvas canvas;
+    public Image healthBarL, healthBarR;
 
     //Private
     private Rigidbody rigid;
@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        canvas.worldCamera = utilities.mainCamera;
         utilities.enemies.Add(this);
     }
 
@@ -41,6 +42,8 @@ public class Enemy : MonoBehaviour
     {
         AttackPlayer();
         EnemyDirection();
+        HealthBarsUpdate(healthBarL, healthBarR);
+        CanvasLookAt(utilities.mainCamera.transform);
     }
 
     private void FixedUpdate()
@@ -76,6 +79,29 @@ public class Enemy : MonoBehaviour
             }
         }    
     }
+    private void HealthBarsUpdate(Image i, Image j)
+    {
+        i.fillAmount = j.fillAmount = health / 25;
+    }
+
+    private void CanvasLookAt(Transform target)
+    {
+        canvas.transform.LookAt(target.position, Vector3.up);
+    }
+
+    public void TakeDamage()
+    {
+        if (health > 0)
+        {
+            health -= player.damage;
+        }
+
+        else
+        {
+            utilities.enemies.Remove(this);
+            Destroy(this.gameObject);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -100,4 +126,5 @@ public class Enemy : MonoBehaviour
             isProximityClose = false;
         }
     }
+
 }
